@@ -1,0 +1,43 @@
+user capabilities:
+
+- Movement
+	limmited to cardinal directions
+	Rotation and direction based
+- Modify world
+	Observe world
+	Interact with world
+	Perform action
+- Modify self
+	Equipt item and wearable item
+- Sense world
+	Direction based
+	Approching object
+	Direction of entity acting on player
+	Direction based hearing
+	Intensity based smelling
+- Sense self
+	Observe status
+	Observe inventory
+	Observe health
+- Memory
+	History of everything
+	Map
+	Journal
+
+
+
+world capability
+
+- Tick = player action
+	Ticks occur when
+		Player moves
+		Player interacts with world
+		Player performs action
+		Player Observes world
+- Create entities
+- Update entities
+- Delete entities
+- Read from entity
+	Status
+- Create tile map
+
