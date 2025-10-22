@@ -57,13 +57,42 @@ type Entity struct {
 }
 
 func main() {
+	
+	var i string
+	
 	w := World{
 		tileMap: make(map[Position]Tile),
-		entities: make(map[Position][]Entity)
+		entities: make(map[Position][]Entity),
+	}
+	fmt.Println(w)
+
+	for {
+		fmt.Scanln(&i)
+
+		if i == "m" || i == "l" || i == "r" || i == "i" || i == "p" {
+			w.updateTick()
+			fmt.Println("Tick was updated: ", w.tick)
+			readAndRun(i)
+		} else {
+			fmt.Println("Tick was not updated")
+			readAndRun(i)
+		}
 	}
 }
 
 
 func (w *World) updateTick() {
-	w.tick = w.tick++
+	w.tick = w.tick + 1
+}
+
+
+func readAndRun(i string) {
+	switch {
+		case i == "s":
+			fmt.Println("soup")
+		case i == "o":
+			fmt.Println("oala koala")
+		case i == "m":
+			fmt.Println("the hero has moved")
+	}
 }
