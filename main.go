@@ -69,13 +69,14 @@ func main() {
 	for {
 		fmt.Scanln(&i)
 
-		if i == "m" || i == "l" || i == "r" || i == "i" || i == "p" {
-			w.updateTick()
-			fmt.Println("Tick was updated: ", w.tick)
-			readAndRun(i)
-		} else {
-			fmt.Println("Tick was not updated")
-			readAndRun(i)
+		switch i {
+			case "m", "l", "r", "i", "p":
+				w.updateTick()
+				fmt.Println("Tick was updated: ", w.tick)
+				readAndRun(i)
+			default:
+				fmt.Println("Tick was not updated:", w.tick)
+				readAndRun(i)
 		}
 	}
 }
@@ -87,12 +88,12 @@ func (w *World) updateTick() {
 
 
 func readAndRun(i string) {
-	switch {
-		case i == "s":
+	switch i {
+		case "s":
 			fmt.Println("soup")
-		case i == "o":
+		case "o":
 			fmt.Println("owala koala")
-		case i == "m":
+		case "m":
 			fmt.Println("the hero has moved")
 	}
 }
