@@ -91,7 +91,7 @@ func readAndRun(i string) {
 		case i == "s":
 			fmt.Println("soup")
 		case i == "o":
-			fmt.Println("oala koala")
+			fmt.Println("owala koala")
 		case i == "m":
 			fmt.Println("the hero has moved")
 	}
