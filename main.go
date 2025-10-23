@@ -57,7 +57,8 @@ type Entity struct {
 }
 
 func main() {
-	
+	p := Player{}
+	p.facing = north
 	var i string
 	
 	w := World{
@@ -71,12 +72,12 @@ func main() {
 
 		switch i {
 			case "m", "l", "r", "i", "p":
+				p.readAndRun(i)
 				w.updateTick()
 				fmt.Println("Tick was updated: ", w.tick)
-				readAndRun(i)
 			default:
+				p.readAndRun(i)
 				fmt.Println("Tick was not updated:", w.tick)
-				readAndRun(i)
 		}
 	}
 }
@@ -87,13 +88,51 @@ func (w *World) updateTick() {
 }
 
 
-func readAndRun(i string) {
+func (p *Player)readAndRun(i string) {
 	switch i {
 		case "s":
 			fmt.Println("soup")
+
 		case "o":
 			fmt.Println("owala koala")
+			
 		case "m":
-			fmt.Println("the hero has moved")
+			switch p.facing {
+				case north:
+					p.position.y ++
+				case east:
+					p.position.x ++
+				case south:
+					p.position.y --
+				case west:
+					p.position.x --
+			}
+			fmt.Println("the hero has moved", p.position)
+			
+		case "l":
+			switch p.facing {
+				case north:
+					p.facing = west
+				case east:
+					p.facing = north
+				case south:
+					p.facing = east
+				case west:
+					p.facing = south
+			}
+			fmt.Println(p.facing)
+
+		case "r":
+			switch p.facing {
+				case north:
+					p.facing = east
+				case east:
+					p.facing = south
+				case south:
+					p.facing = west
+				case west:
+					p.facing = north
+			}
+			fmt.Println(p.facing)
 	}
 }
