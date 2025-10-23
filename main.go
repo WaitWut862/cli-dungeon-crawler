@@ -2,7 +2,8 @@ package main
 
 import(
 	"fmt"
-	"github.com/WaitWut862/cli-dungeon-crawler/help.txt"
+	"io"
+	"os"
 )
 
 type Player struct {
@@ -61,12 +62,14 @@ func main() {
 	p := &Player{}
 	p.facing = north
 	var i string
-	help := github.com/WaitWut862/cli-dungeon-crawler/help.txt
 	
 	w := World{
 		tileMap: make(map[Position]Tile),
 		entities: make(map[Position][]Entity),
 	}
+
+	fmt.Println("Enter 'help' or 'h' to see a detailed list of all available moves")
+	
 	fmt.Println(w)
 
 	for {
@@ -93,7 +96,7 @@ func (w *World) updateTick() {
 func readAndRun(i string, p *Player) {
 	switch i {
 		case "h", "help":
-			fmt.Println(help)
+			printHelp()
 		
 		case "m", "move":
 			p.move()
@@ -169,4 +172,21 @@ func (p *Player) facingString() string {
 		default:
 			return "Direction not resolved"
 	}
+}
+
+
+func printHelp() {
+	file, err := os.Open("help.txt")
+	if err != nil {
+		fmt.Println("Error: ", err)
+		return
+	}
+	defer file.Close()
+
+	data, err := io.ReadAll(file)
+	if err != nil {
+		fmt.Println("Error: ", err)
+		return
+	}
+	fmt.Println(string(data))
 }
