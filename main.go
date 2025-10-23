@@ -57,7 +57,7 @@ type Entity struct {
 }
 
 func main() {
-	p := Player{}
+	p := &Player{}
 	p.facing = north
 	var i string
 	
@@ -72,11 +72,11 @@ func main() {
 
 		switch i {
 			case "m", "l", "r", "i", "p":
-				p.readAndRun(i)
+				readAndRun(i, p)
 				w.updateTick()
 				fmt.Println("Tick was updated: ", w.tick)
 			default:
-				p.readAndRun(i)
+				readAndRun(i, p)
 				fmt.Println("Tick was not updated:", w.tick)
 		}
 	}
@@ -88,51 +88,61 @@ func (w *World) updateTick() {
 }
 
 
-func (p *Player)readAndRun(i string) {
+func readAndRun(i string, p *Player) {
 	switch i {
-		case "s":
-			fmt.Println("soup")
-
-		case "o":
-			fmt.Println("owala koala")
-			
 		case "m":
-			switch p.facing {
-				case north:
-					p.position.y ++
-				case east:
-					p.position.x ++
-				case south:
-					p.position.y --
-				case west:
-					p.position.x --
-			}
+			p.move()
 			fmt.Println("the hero has moved", p.position)
 			
 		case "l":
-			switch p.facing {
-				case north:
-					p.facing = west
-				case east:
-					p.facing = north
-				case south:
-					p.facing = east
-				case west:
-					p.facing = south
-			}
+			p.turnLeft()
 			fmt.Println(p.facing)
 
 		case "r":
-			switch p.facing {
-				case north:
-					p.facing = east
-				case east:
-					p.facing = south
-				case south:
-					p.facing = west
-				case west:
-					p.facing = north
-			}
+			p.turnRight()
 			fmt.Println(p.facing)
+	}
+}
+
+
+
+func (p *Player) turnLeft() {
+	switch p.facing {
+		case north:
+			p.facing = west
+		case east:
+			p.facing = north
+		case south:
+			p.facing = east
+		case west:
+			p.facing = south
+	}		
+}
+
+
+func (p *Player) turnRight() {
+	switch p.facing {
+		case north:
+			p.facing = east
+		case east:
+			p.facing = south
+		case south:
+			p.facing = west
+		case west:
+			p.facing = north
+	}
+}
+
+
+func (p *Player) move() {
+	switch p.facing {
+		case north:
+			p.position.y ++
+		case east:
+			p.position.x ++
+		case south:
+			p.position.y --
+		case west:
+			p.position.x --
 	}
 }
