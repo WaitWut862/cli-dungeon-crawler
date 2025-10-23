@@ -2,6 +2,7 @@ package main
 
 import(
 	"fmt"
+	"github.com/WaitWut862/cli-dungeon-crawler/help.txt"
 )
 
 type Player struct {
@@ -60,6 +61,7 @@ func main() {
 	p := &Player{}
 	p.facing = north
 	var i string
+	help := github.com/WaitWut862/cli-dungeon-crawler/help.txt
 	
 	w := World{
 		tileMap: make(map[Position]Tile),
@@ -71,7 +73,7 @@ func main() {
 		fmt.Scanln(&i)
 
 		switch i {
-			case "m", "l", "r", "i", "p":
+			case "m", "move", "i", "inspect", "p", "perform":
 				readAndRun(i, p)
 				w.updateTick()
 				fmt.Println("Tick was updated: ", w.tick)
@@ -90,17 +92,22 @@ func (w *World) updateTick() {
 
 func readAndRun(i string, p *Player) {
 	switch i {
-		case "m":
+		case "h", "help":
+			fmt.Println(help)
+		
+		case "m", "move":
 			p.move()
-			fmt.Println("the hero has moved", p.position)
+			fmt.Println("moved to ", p.position)
 			
-		case "l":
+		case "l", "left":
 			p.turnLeft()
-			fmt.Println(p.facing)
+			f := p.facingString()
+			fmt.Println(f)
 
-		case "r":
+		case "r", "right":
 			p.turnRight()
-			fmt.Println(p.facing)
+			f := p.facingString()
+			fmt.Println(f)
 	}
 }
 
@@ -144,5 +151,22 @@ func (p *Player) move() {
 			p.position.y --
 		case west:
 			p.position.x --
+	}
+}
+
+
+func (p *Player) facingString() string {
+	f := p.facing
+	switch f {
+		case north:
+			return "North"
+		case east:
+			return "East"
+		case south:
+			return "South"
+		case west:
+			return "West"
+		default:
+			return "Direction not resolved"
 	}
 }

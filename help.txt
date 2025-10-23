@@ -1,0 +1,10 @@
+*COMMANDS*
+Commands are listed as (name - alias: description)
+
+The following commands do not initiate world tick:
+	help - h: opens this help page
+
+The following commands initiate world tick:
+	move - m: moves the player on tile in current direction
+	left - l: rotates the player 90 degrees to the left
+	right -r: rotates the player 90 degrees to the right
