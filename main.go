@@ -4,6 +4,8 @@ import(
 	"fmt"
 	"io"
 	"os"
+
+	escapes "github.com/snugfox/ansi-escapes"
 )
 
 type Player struct {
@@ -61,6 +63,7 @@ type Entity struct {
 func main() {
 	p := &Player{}
 	p.facing = north
+	p.health = 100
 	var i string
 	
 	w := World{
@@ -68,9 +71,11 @@ func main() {
 		entities: make(map[Position][]Entity),
 	}
 
-	fmt.Println("Enter 'help' or 'h' to see a detailed list of all available moves")
+	wd := &World{}
+
 	
 	fmt.Println(w)
+	renderStart(wd, p)
 
 	for {
 		fmt.Scanln(&i)
@@ -78,13 +83,31 @@ func main() {
 		switch i {
 			case "m", "move", "i", "inspect", "p", "perform":
 				readAndRun(i, p)
-				w.updateTick()
-				fmt.Println("Tick was updated: ", w.tick)
+				wd.updateTick()
+				render(wd, p)
+			case "h", "help":
+				readAndRun(i, p)
 			default:
 				readAndRun(i, p)
-				fmt.Println("Tick was not updated:", w.tick)
+				render(wd, p)
 		}
 	}
+}
+
+
+func render(w *World, p *Player) {
+	f := p.facingString()
+	fmt.Print(escapes.EraseScreen)
+	fmt.Println("position ", p.position, ", facing ", f, ", health", p.health, "tick ", w.tick)
+}
+
+
+func renderStart(w *World, p *Player) {
+	f := p.facingString()
+	fmt.Print(escapes.EraseScreen)
+	fmt.Println("Enter 'help' or 'h' to see a detailed list of all available moves")
+	fmt.Println("position ", p.position, ", facing ", f, ", health", p.health, "tick ", w.tick)
+	
 }
 
 
@@ -100,17 +123,12 @@ func readAndRun(i string, p *Player) {
 		
 		case "m", "move":
 			p.move()
-			fmt.Println("moved to ", p.position)
 			
 		case "l", "left":
 			p.turnLeft()
-			f := p.facingString()
-			fmt.Println(f)
 
 		case "r", "right":
 			p.turnRight()
-			f := p.facingString()
-			fmt.Println(f)
 	}
 }
 
@@ -188,5 +206,7 @@ func printHelp() {
 		fmt.Println("Error: ", err)
 		return
 	}
+	fmt.Print(escapes.EraseScreen)
 	fmt.Println(string(data))
 }
+
