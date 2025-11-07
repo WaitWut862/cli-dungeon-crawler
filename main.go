@@ -66,16 +66,11 @@ func main() {
 	p.health = 100
 	var i string
 	
-	w := World{
-		tileMap: make(map[Position]Tile),
-		entities: make(map[Position][]Entity),
-	}
-
-	wd := &World{}
-
+	w := &World{}
+	w.makeWorld()
 	
 	fmt.Println(w)
-	renderStart(wd, p)
+	renderStart(w, p)
 
 	for {
 		fmt.Scanln(&i)
@@ -83,13 +78,13 @@ func main() {
 		switch i {
 			case "m", "move", "i", "inspect", "p", "perform":
 				readAndRun(i, p)
-				wd.updateTick()
-				render(wd, p)
+				w.updateTick()
+				render(w, p)
 			case "h", "help":
 				readAndRun(i, p)
 			default:
 				readAndRun(i, p)
-				render(wd, p)
+				render(w, p)
 		}
 	}
 }
@@ -107,7 +102,12 @@ func renderStart(w *World, p *Player) {
 	fmt.Print(escapes.EraseScreen)
 	fmt.Println("Enter 'help' or 'h' to see a detailed list of all available moves")
 	fmt.Println("position ", p.position, ", facing ", f, ", health", p.health, "tick ", w.tick)
-	
+}
+
+
+func (w *World) makeWorld() {
+	w.tileMap = make(map[Position]Tile)
+	w.entities = make(map[Position][]Entity)
 }
 
 
