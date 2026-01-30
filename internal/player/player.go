@@ -2,80 +2,76 @@ package player
 
 import (
 	"fmt"
+	"github.com/WaitWut862/cli-dungeon-crawler/internal/common"
 )
 
 type Player struct {
-	inventory Inventory
-	health    int
-	position  Position
-	statuses  Statuses
-	facing    Direction
+	Inventory Inventory
+	Health    int
+	Position  common.Position
+	Statuses  Statuses
+	Facing    Direction
 }
 
 type Direction int
 
 const (
-	north = Direction(iota)
-	east
-	south
-	west
+	North = Direction(iota)
+	East
+	South
+	West
 )
 
 type Statuses struct {
-	poisoned  bool
-	boosted   bool
-	weakened  bool
-	enraged   bool
-	fortified bool
-}
-
-type Position struct {
-	x int
-	y int
+	Poisoned  bool
+	Boosted   bool
+	Weakened  bool
+	Enraged   bool
+	Fortified bool
 }
 
 type Inventory struct {
 }
 
-func (p *Player) turnLeft() {
-	p.facing = p.facing - 1
-	if p.facing < 0 {
-		p.facing = 3
+func (p *Player) TurnLeft() {
+	p.Facing = p.Facing - 1
+	if p.Facing < 0 {
+		p.Facing = 3
 	}
-	fmt.Println(p.facing)
+	fmt.Println(p.Facing)
 }
 
-func (p *Player) turnRight() {
-	p.facing = p.facing + 1
-	if p.facing > 3 {
-		p.facing = 0
+func (p *Player) TurnRight() {
+	p.Facing = p.Facing + 1
+	if p.Facing > 3 {
+		p.Facing = 0
 	}
-	fmt.Println(p.facing)
+	fmt.Println(p.Facing)
 }
 
-func (p *Player) move() {
-	switch p.facing {
-	case north:
-		p.position.y++
-	case east:
-		p.position.x++
-	case south:
-		p.position.y--
-	case west:
-		p.position.x--
+func (p *Player) Move() {
+	switch p.Facing {
+	case North:
+		p.Position.Y++
+	case East:
+		p.Position.X++
+	case South:
+		p.Position.Y--
+	case West:
+		p.Position.X--
 	}
 }
 
-func (p *Player) facingString() string {
-	f := p.facing
+func (p *Player) FacingString() string {
+	f := p.Facing
 	switch f {
-	case north:
+	case North:
 		return "North"
-	case east:
+	case East:
 		return "East"
-	case south:
+	case South:
 		return "South"
-	case west:
+	case West:
 		return "West"
 	default:
 		return "Direction not resolved"

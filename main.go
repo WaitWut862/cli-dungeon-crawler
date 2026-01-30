@@ -6,33 +6,17 @@ import (
 	"os"
 
 	"github.com/WaitWut862/cli-dungeon-crawler/internal/player"
+	"github.com/WaitWut862/cli-dungeon-crawler/internal/world"
 )
 
-type World struct {
-	tick     int
-	tileMap  map[Position]Tile
-	entities map[Position][]Entity
-}
-
-type Tile struct {
-	position   Position
-	groundType string
-}
-
-type Entity struct {
-	position    Position
-	name        string
-	obstructing bool
-}
-
 func main() {
-	p := &Player{}
-	p.facing = north
-	p.health = 100
+	p := &player.Player{}
+	p.Facing = player.North
+	p.Health = 100
 	var i string
 
-	w := &World{}
-	w.makeWorld()
+	w := &world.World{}
+	w.MakeWorld()
 
 	renderStart(w, p)
 
@@ -42,7 +26,7 @@ func main() {
 		switch i {
 		case "m", "move", "i", "inspect", "p", "perform":
 			readAndRun(i, p)
-			w.updateTick()
+			w.UpdateTick()
 			render(w, p)
 		case "h", "help":
 			readAndRun(i, p)
@@ -53,40 +37,32 @@ func main() {
 	}
 }
 
-func render(w *World, p *Player) {
-	f := p.facingString()
+func render(w *world.World, p *player.Player) {
+	f := p.FacingString()
 	fmt.Print("\033[H\033[2J")
-	fmt.Printf("position %v | facing %s | health %v | tick %v ", p.position, f, p.health, w.tick)
+	fmt.Printf("position %v | facing %s | health %v | tick %v ", p.Position, f, p.Health, w.Tick)
 }
 
-func renderStart(w *World, p *Player) {
+func renderStart(w *world.World, p *player.Player) {
 	render(w, p)
 	fmt.Println()
 	fmt.Println("Enter 'help' or 'h' to see a detailed list of all available moves")
 }
 
-func (w *World) makeWorld() {
-	w.tileMap = make(map[Position]Tile)
-	w.entities = make(map[Position][]Entity)
-}
 
-func (w *World) updateTick() {
-	w.tick = w.tick + 1
-}
-
-func readAndRun(i string, p *Player) {
+func readAndRun(i string, p *player.Player) {
 	switch i {
 	case "h", "help":
 		printHelp()
 
 	case "m", "move":
-		p.move()
+		p.Move()
 
 	case "l", "left":
-		p.turnLeft()
+		p.TurnLeft()
 
 	case "r", "right":
-		p.turnRight()
+		p.TurnRight()
 	}
 }
 
