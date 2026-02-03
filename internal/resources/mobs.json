@@ -1,0 +1,52 @@
+{
+  "mobs": [
+    {
+      "name": "Goblin",
+      "description": "A small, sneaky creature with sharp claws",
+      "health": 30,
+      "inventorySize": 2
+    },
+    {
+      "name": "Skeleton",
+      "description": "Animated bones wielding rusty weapons",
+      "health": 40,
+      "inventorySize": 3
+    },
+    {
+      "name": "Orc",
+      "description": "A brutish warrior with immense strength",
+      "health": 80,
+      "inventorySize": 4
+    },
+    {
+      "name": "Spider",
+      "description": "A giant arachnid with venomous fangs",
+      "health": 25,
+      "inventorySize": 0
+    },
+    {
+      "name": "Zombie",
+      "description": "A shambling undead that never stops pursuing",
+      "health": 50,
+      "inventorySize": 1
+    },
+    {
+      "name": "Bat",
+      "description": "A small flying creature that attacks in swarms",
+      "health": 10,
+      "inventorySize": 0
+    },
+    {
+      "name": "Troll",
+      "description": "A massive brute that regenerates health",
+      "health": 120,
+      "inventorySize": 5
+    },
+    {
+      "name": "Player",
+      "description": "The hero of the dungeon",
+      "health": 100,
+      "inventorySize": 10
+    }
+  ]
+}

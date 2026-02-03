@@ -1,6 +1,6 @@
 user capabilities:
 
-- Movement
+- Movement *
 	limmited to cardinal directions
 	Rotation and direction based
 - Modify world
