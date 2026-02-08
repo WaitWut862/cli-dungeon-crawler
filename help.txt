@@ -9,3 +9,10 @@ The following commands do not initiate world tick:
 
 The following commands initiate world tick:
 	move - m: moves the player on tile in current direction
+
+Camera controls (do not initiate world tick):
+	cw: move camera north (up)
+	cs: move camera south (down)
+	ca: move camera west (left)
+	cd: move camera east (right)
+	cc: center camera on player

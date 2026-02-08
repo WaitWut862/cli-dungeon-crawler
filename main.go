@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/WaitWut862/cli-dungeon-crawler/internal/camera"
 	"github.com/WaitWut862/cli-dungeon-crawler/internal/common"
 	"github.com/WaitWut862/cli-dungeon-crawler/internal/mob"
 	"github.com/WaitWut862/cli-dungeon-crawler/internal/resources"
@@ -32,26 +33,28 @@ func main() {
 	var ptB common.Position = common.Position{X: 60, Y: 60}
 	w.GenerateChunk(ptA, ptB)
 
-	renderStart(w, p)
+	cam := camera.NewCamera(80, 40)
+
+	renderStart(w, p, cam)
 
 	for {
 		fmt.Scanln(&i)
 
 		switch i {
 		case "m", "move", "i", "inspect", "p", "perform":
-			readAndRun(i, p)
+			readAndRun(i, p, cam)
 			w.UpdateTick()
-			render(w, p)
+			render(w, p, cam)
 		case "h", "help":
-			readAndRun(i, p)
+			readAndRun(i, p, cam)
 		default:
-			readAndRun(i, p)
-			render(w, p)
+			readAndRun(i, p, cam)
+			render(w, p, cam)
 		}
 	}
 }
 
-func readAndRun(i string, p *mob.Player) {
+func readAndRun(i string, p *mob.Player, cam *camera.Camera) {
 	switch i {
 	case "h", "help":
 		printHelp()
@@ -67,19 +70,32 @@ func readAndRun(i string, p *mob.Player) {
 
 	case "r", "right":
 		p.TurnRight()
+
+	case "cw":
+		cam.MoveNorth()
+	case "cs":
+		cam.MoveSouth()
+	case "ca":
+		cam.MoveWest()
+	case "cd":
+		cam.MoveEast()
+	case "cc":
+		cam.Position = p.Position
 	}
 }
 
-func render(w *world.World, p *mob.Player) {
+func render(w *world.World, p *mob.Player, cam *camera.Camera) {
 	f := p.FacingString()
 	fmt.Print("\033[H\033[2J")
-	for j := 60; j >= -60; j-- {
-		for i := -60; i <= 60; i++ {
+
+	halfW := cam.Width / 2
+	halfH := cam.Height / 2
+
+	for j := cam.Position.Y + halfH; j >= cam.Position.Y-halfH; j-- {
+		for i := cam.Position.X - halfW; i <= cam.Position.X+halfW; i++ {
 			pos := common.Position{X: i, Y: j}
 			tile, exists := w.TileMap[pos]
-			if (!exists || tile.GroundType == "") && p.Position != pos {
-				print(" ")
-			} else if p.Position == pos {
+			if p.Position == pos {
 				switch p.Facing {
 				case common.North:
 					print("^")
@@ -90,17 +106,20 @@ func render(w *world.World, p *mob.Player) {
 				case common.West:
 					print("<")
 				}
-			} else {
+			} else if exists && tile.GroundType != "" {
 				print("#")
+			} else {
+				print(" ")
 			}
 		}
 		println()
 	}
-	fmt.Printf("position %v | facing %s | health %v | tick %v\n", p.Position, f, p.Health, w.Tick)
+	fmt.Printf("position %v | facing %s | health %v | tick %v | camera (%d,%d)\n",
+		p.Position, f, p.Health, w.Tick, cam.Position.X, cam.Position.Y)
 }
 
-func renderStart(w *world.World, p *mob.Player) {
-	render(w, p)
+func renderStart(w *world.World, p *mob.Player, cam *camera.Camera) {
+	render(w, p, cam)
 	fmt.Println()
 	fmt.Println("Enter 'help' or 'h' to see a detailed list of all available moves")
 }
