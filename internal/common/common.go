@@ -14,12 +14,15 @@ type Position struct {
 	Y int
 }
 
+func Origin() Position {
+	return Position{0, 0}
+}
+
 type Item struct {
 	Name        string
 	Description string
 }
 
 type Inventory struct {
-	Length int
-	Slots  []Item
+	Slots int //temp
 }

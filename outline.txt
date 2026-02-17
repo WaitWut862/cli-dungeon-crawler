@@ -33,7 +33,7 @@ world capability
 		Player moves
 		Player interacts with world
 		Player performs action
-		Player Observes world
+		Player observes world
 - Create entities
 - Update entities
 - Delete entities

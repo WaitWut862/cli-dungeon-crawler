@@ -4,66 +4,23 @@ import (
 	"fmt"
 	"io"
 	"os"
+
+	c "cli-dungeon-crawler/internal/common"
+	m "cli-dungeon-crawler/internal/mobs"
+	"cli-dungeon-crawler/internal/world"
 )
 
-type Player struct {
-	inventory Inventory
-	health    int
-	position  Position
-	statuses  Statuses
-	facing    Direction
-}
-
-type Direction int
-
-const (
-	north = Direction(iota)
-	east
-	south
-	west
-)
-
-type Statuses struct {
-	poisoned  bool
-	boosted   bool
-	weakened  bool
-	enraged   bool
-	fortified bool
-}
-
-type Position struct {
-	x int
-	y int
-}
-
-type Inventory struct {
-}
-
-type World struct {
-	tick     int
-	tileMap  map[Position]Tile
-	entities map[Position][]Entity
-}
-
-type Tile struct {
-	position   Position
-	groundType string
-}
-
-type Entity struct {
-	position    Position
-	name        string
-	obstructing bool
-}
+type direction = c.Direction
+type position = c.Position
 
 func main() {
-	p := &Player{}
-	p.facing = north
-	p.health = 100
+	p := new(m.Mob)
+	p.Facing = c.North
+	p.Health = 100
 	var i string
 
-	w := &World{}
-	w.makeWorld()
+	w := new(world.World)
+	w.MakeWorld()
 
 	fmt.Println(w)
 	renderStart(w, p)
@@ -74,7 +31,7 @@ func main() {
 		switch i {
 		case "m", "move", "i", "inspect", "p", "perform":
 			readAndRun(i, p)
-			w.updateTick()
+			w.UpdateTick()
 			render(w, p)
 		case "h", "help":
 			readAndRun(i, p)
@@ -85,96 +42,32 @@ func main() {
 	}
 }
 
-func render(w *World, p *Player) {
-	f := p.facingString()
+func render(w *world.World, p *m.Mob) {
+	f := p.FacingString()
 	fmt.Print("\033[H\033[2J")
-	fmt.Println("position ", p.position, ", facing ", f, ", health", p.health, "tick ", w.tick)
+	fmt.Println("position ", p.Position, ", facing ", f, ", health", p.Health, "tick ", w.Tick)
 }
 
-func renderStart(w *World, p *Player) {
-	f := p.facingString()
+func renderStart(w *world.World, p *m.Mob) {
+	f := p.FacingString()
 	fmt.Print("\033[H\033[2J")
-	fmt.Println("position ", p.position, ", facing ", f, ", health", p.health, "tick ", w.tick)
+	fmt.Println("position ", p.Position, ", facing ", f, ", health", p.Health, "tick ", w.Tick)
 	fmt.Println("Enter 'help' or 'h' to see a detailed list of all available moves")
 }
 
-func (w *World) makeWorld() {
-	w.tileMap = make(map[Position]Tile)
-	w.entities = make(map[Position][]Entity)
-}
-
-func (w *World) updateTick() {
-	w.tick = w.tick + 1
-}
-
-func readAndRun(i string, p *Player) {
+func readAndRun(i string, p *m.Mob) {
 	switch i {
 	case "h", "help":
 		printHelp()
 
 	case "m", "move":
-		p.move()
+		p.Move()
 
 	case "l", "left":
-		p.turnLeft()
+		p.TurnLeft()
 
 	case "r", "right":
-		p.turnRight()
-	}
-}
-
-func (p *Player) turnLeft() {
-	switch p.facing {
-	case north:
-		p.facing = west
-	case east:
-		p.facing = north
-	case south:
-		p.facing = east
-	case west:
-		p.facing = south
-	}
-}
-
-func (p *Player) turnRight() {
-	switch p.facing {
-	case north:
-		p.facing = east
-	case east:
-		p.facing = south
-	case south:
-		p.facing = west
-	case west:
-		p.facing = north
-	}
-}
-
-func (p *Player) move() {
-	switch p.facing {
-	case north:
-		p.position.y++
-	case east:
-		p.position.x++
-	case south:
-		p.position.y--
-	case west:
-		p.position.x--
-	}
-}
-
-func (p *Player) facingString() string {
-	f := p.facing
-	switch f {
-	case north:
-		return "North"
-	case east:
-		return "East"
-	case south:
-		return "South"
-	case west:
-		return "West"
-	default:
-		return "Direction not resolved"
+		p.TurnRight()
 	}
 }
 

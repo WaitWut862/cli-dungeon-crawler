@@ -5,27 +5,27 @@ import (
 )
 
 type World struct {
-	tick     int
-	tileMap  map[c.Position]Tile
-	entities map[c.Position][]Entity
+	Tick     int
+	TileMap  map[c.Position]Tile
+	Entities map[c.Position][]Entity
 }
 
 type Tile struct {
-	position   c.Position
-	groundType string
+	Position   c.Position
+	GroundType string
 }
 
 type Entity struct {
-	position    c.Position
-	name        string
-	obstructing bool
+	Position    c.Position
+	Name        string
+	Obstructing bool
 }
 
-func (w *World) makeWorld() {
-	w.tileMap = make(map[c.Position]Tile)
-	w.entities = make(map[c.Position][]Entity)
+func (w *World) MakeWorld() {
+	w.TileMap = make(map[c.Position]Tile)
+	w.Entities = make(map[c.Position][]Entity)
 }
 
-func (w *World) updateTick() {
-	w.tick = w.tick + 1
+func (w *World) UpdateTick() {
+	w.Tick = w.Tick + 1
 }
