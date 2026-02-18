@@ -68,6 +68,9 @@ func readAndRun(i string, p *m.Mob) {
 
 	case "r", "right":
 		p.TurnRight()
+	case "q", "quit":
+		fmt.Println("Terminated")
+		os.Exit(0)
 	}
 }
 

@@ -29,3 +29,7 @@ func (w *World) MakeWorld() {
 func (w *World) UpdateTick() {
 	w.Tick = w.Tick + 1
 }
+
+func (w *World) GenerateChunk(pt1, pt2 c.Position) {
+	 
+}

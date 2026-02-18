@@ -74,13 +74,3 @@ func (m *Mob) FacingString() string {
 }
 
 type Player Mob
-
-func NewPlayer() *Player {
-	return &Player{
-		0,
-		100,
-		c.Origin(),
-		_,
-		c.North,
-	}
-}
