@@ -10,33 +10,28 @@ import (
 	"cli-dungeon-crawler/internal/world"
 )
 
-type direction = c.Direction
-type position = c.Position
-
 func main() {
-	p := new(m.Mob)
-	p.Facing = c.North
-	p.Health = 100
+	p := m.NewMob("player")
 	var i string
 
 	w := new(world.World)
 	w.MakeWorld()
+	w.GenerateChunk(c.Pos(-20, -20), c.Pos(20, 20), "stone")
 
-	fmt.Println(w)
-	renderStart(w, p)
+	renderStart()
 
 	for {
 		fmt.Scanln(&i)
 
 		switch i {
 		case "m", "move", "i", "inspect", "p", "perform":
-			readAndRun(i, p)
+			readAndRun(i, p, w)
 			w.UpdateTick()
 			render(w, p)
-		case "h", "help":
-			readAndRun(i, p)
+		case "h", "help", "d", "debug":
+			readAndRun(i, p, w)
 		default:
-			readAndRun(i, p)
+			readAndRun(i, p, w)
 			render(w, p)
 		}
 	}
@@ -44,18 +39,27 @@ func main() {
 
 func render(w *world.World, p *m.Mob) {
 	f := p.FacingString()
+
+	groundType := ""
+
+	if tile, ok := w.TileMap[p.Position]; ok {
+		groundType = tile.GroundType
+	}
+
+	lookingAt := "nothing"
+	if entities, ok := w.Entities[p.Front()]; ok && len(entities) > 0 {
+		lookingAt = entities[0].Name
+	}
+
 	fmt.Print("\033[H\033[2J")
-	fmt.Println("position ", p.Position, ", facing ", f, ", health", p.Health, "tick ", w.Tick)
+	fmt.Printf("positition = %v | facing = %s | floor = %s | looking at =  %s | health = %d | tick = %d", p.Position, f, groundType, lookingAt, p.Health, w.Tick)
 }
 
-func renderStart(w *world.World, p *m.Mob) {
-	f := p.FacingString()
-	fmt.Print("\033[H\033[2J")
-	fmt.Println("position ", p.Position, ", facing ", f, ", health", p.Health, "tick ", w.Tick)
+func renderStart() {
 	fmt.Println("Enter 'help' or 'h' to see a detailed list of all available moves")
 }
 
-func readAndRun(i string, p *m.Mob) {
+func readAndRun(i string, p *m.Mob, w *world.World) {
 	switch i {
 	case "h", "help":
 		printHelp()
@@ -71,6 +75,8 @@ func readAndRun(i string, p *m.Mob) {
 	case "q", "quit":
 		fmt.Println("Terminated")
 		os.Exit(0)
+	case "d", "debug":
+		fmt.Printf("%+v", w.TileMap)
 	}
 }
 

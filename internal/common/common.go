@@ -14,8 +14,8 @@ type Position struct {
 	Y int
 }
 
-func Origin() Position {
-	return Position{0, 0}
+func Pos(x, y int) Position {
+	return Position{X: x, Y: y}
 }
 
 type Item struct {
@@ -24,5 +24,6 @@ type Item struct {
 }
 
 type Inventory struct {
-	Slots int //temp
+	Capasity int
+	Slots    map[int]Item
 }

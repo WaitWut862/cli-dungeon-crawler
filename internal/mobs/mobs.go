@@ -1,8 +1,12 @@
 package mobs
 
-import c "cli-dungeon-crawler/internal/common"
+import (
+	c "cli-dungeon-crawler/internal/common"
+	//w "cli-dungeon-crawler/internal/world"
+)
 
 type Mob struct {
+	Behavior  Behavior
 	Inventory c.Inventory
 	Health    int
 	Position  c.Position
@@ -16,6 +20,44 @@ type Statuses struct {
 	Weakened  bool
 	Enraged   bool
 	Fortified bool
+}
+
+type MobPeram func(*Mob)
+
+type Behavior = func(m *Mob)
+
+func NewMob(name string, options ...MobPeram) *Mob {
+	mob, ok := MobList[name]
+	if !ok { // todo
+
+	}
+	return &mob
+}
+
+func (m *Mob) P() c.Position {
+	return m.Position
+}
+
+func (m *Mob) X() int {
+	return m.Position.X
+}
+
+func (m *Mob) Y() int {
+	return m.Position.Y
+}
+
+func (m *Mob) Front() c.Position {
+	switch m.Facing {
+	case c.North:
+		return c.Pos(m.X()+1, m.Y())
+	case c.East:
+		return c.Pos(m.X(), m.Y()+1)
+	case c.South:
+		return c.Pos(m.X()-1, m.Y())
+	case c.West:
+		return c.Pos(m.X(), m.Y()-1)
+	}
+	return c.Pos(0, 0)
 }
 
 func (m *Mob) TurnLeft() {
@@ -72,5 +114,3 @@ func (m *Mob) FacingString() string {
 		return "Direction not resolved"
 	}
 }
-
-type Player Mob
