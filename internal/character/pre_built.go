@@ -1,4 +1,4 @@
-package mobs
+package character
 
 import (
 	"math/rand/v2"
@@ -6,7 +6,7 @@ import (
 	c "cli-dungeon-crawler/internal/common"
 )
 
-var MobList = map[string]Mob{
+var CharacterList = map[string]Character{
 	"walker": {
 		Behavior: Wanderer,
 		Health:   1,
@@ -19,7 +19,7 @@ var MobList = map[string]Mob{
 	},
 }
 
-var Wanderer Behavior = func(m *Mob) {
+var Wanderer Behavior = func(m *Character) {
 	switch rand.IntN(3) {
 	case 0:
 		m.Move()

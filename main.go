@@ -5,20 +5,21 @@ import (
 	"io"
 	"os"
 
+	"cli-dungeon-crawler/internal/character"
 	c "cli-dungeon-crawler/internal/common"
-	m "cli-dungeon-crawler/internal/mobs"
 	"cli-dungeon-crawler/internal/world"
 )
 
 func main() {
-	p := m.NewMob("player")
-	var i string
+	p := character.New("player")
 
-	w := new(world.World)
-	w.MakeWorld()
+	w := world.New()
+
 	w.GenerateChunk(c.Pos(-20, -20), c.Pos(20, 20), "stone")
 
 	renderStart()
+
+	var i string
 
 	for {
 		fmt.Scanln(&i)
@@ -37,7 +38,7 @@ func main() {
 	}
 }
 
-func render(w *world.World, p *m.Mob) {
+func render(w *world.World, p *character.Character) {
 	f := p.FacingString()
 
 	groundType := ""
@@ -52,14 +53,14 @@ func render(w *world.World, p *m.Mob) {
 	}
 
 	fmt.Print("\033[H\033[2J")
-	fmt.Printf("positition = %v | facing = %s | floor = %s | looking at =  %s | health = %d | tick = %d", p.Position, f, groundType, lookingAt, p.Health, w.Tick)
+	fmt.Printf("positition = %v \n\nfacing = %s \n\nfloor = %s \n\nlooking at =  %s \n\nhealth = %d \n\ntick = %d\n\ncommand:", p.Position, f, groundType, lookingAt, p.Health, w.Tick)
 }
 
 func renderStart() {
 	fmt.Println("Enter 'help' or 'h' to see a detailed list of all available moves")
 }
 
-func readAndRun(i string, p *m.Mob, w *world.World) {
+func readAndRun(i string, p *character.Character, w *world.World) {
 	switch i {
 	case "h", "help":
 		printHelp()
